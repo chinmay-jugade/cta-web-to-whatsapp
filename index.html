@@ -18,6 +18,33 @@
             </svg>
             <span>Message us on WhatsApp</span>
         </a>
+    <div class="visitor-counter" id="visitor-counter">
+        <span class="counter-label">Total Visitors:</span>
+        <span id="counter-value">...</span>
     </div>
+
+    <script>
+        async function updateCounter() {
+            const namespace = 'cta-web-to-whatsapp';
+            const key = 'page-loads';
+            const counterUrl = `https://api.counterapi.dev/v1/${namespace}/${key}/increment`;
+            const valueElement = document.getElementById('counter-value');
+
+            try {
+                const response = await fetch(counterUrl);
+                if (!response.ok) throw new Error('Counter API failed');
+                const data = await response.json();
+                valueElement.textContent = data.count.toLocaleString();
+                // Add a small fade-in effect via class
+                document.getElementById('visitor-counter').classList.add('visible');
+            } catch (error) {
+                console.error('Error updating counter:', error);
+                valueElement.textContent = '---';
+            }
+        }
+
+        // Initialize counter update on load
+        window.addEventListener('DOMContentLoaded', updateCounter);
+    </script>
 </body>
 </html>
